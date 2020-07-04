@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Foobler</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <style>
+      .error{
+          color: red;
+          display: none;
+      }
+      .cont{
+        padding: 5px;
+        margin-right: 15px;
+      }
+      .conty{
+          padding: 5px;
+          margin-left: 15px;
+      }
+  </style>
+  <body>
+    <div class="container mt-5">
+    <div class="card text-center" >
+        <div class="card-body bg-light">
+          <h1 class="card-title">Currency Converter</h1><br>
+          <h6 class="card-subtitle mb-2 text-muted">
+              Enter the Amount: 
+              <input type="number" placeholder="Enter Amount" id="amt">
+          </h6>
+          <p class="card-text">
+            <div class="mb-4">
+                <span id="priceError" class="error"> Please enter value in number</span>
+            </div> 
+          </p>
+            <select id="Country" class="cont">
+            <option selected="" value="Default">(Please select a country)</option>
+            <option> CAD </option>
+            <option> HKD </option>
+            <option> ISK </option>
+            <option> PHP </option>
+            <option> INR </option>
+            <option> RUB </option>
+            <option> USD </option>
+            <option> EUR </option>
+            <option> TRY </option>
+            <option> NOK </option>
+            <option> AUD </option>
+        </select>
+
+        
+            <button class="btn btn-info" onclick="exchange()">
+
+                <img src="https://img.icons8.com/ios/30/000000/currency-exchange.png"/>
+            </button>
+          
+      
+        <select id="Country2" class="conty">
+            <option selected="" value="Default">(Please select a country)</option>
+            <option> CAD </option>
+            <option> HKD </option>
+            <option> ISK </option>
+            <option> PHP </option>
+            <option> INR </option>
+            <option> RUB </option>
+            <option> USD </option>
+            <option> EUR </option>
+            <option> TRY </option>
+            <option> NOK </option>
+            <option> AUD </option>
+        </select>
+        <h1>
+            <span id="result"> </span>
+        </h1> <br> <br>
+        <div>
+            <button onclick="convert()" class="btn btn-primary"> Exchange </button>
+        </div>
+    </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="/countUp.js" type="module"></script>
+    <script>
+        function convert(){
+            document.getElementById('priceError').style.display = "none";
+            var Country = document.getElementById('Country').value;
+            var Country2 = document.getElementById('Country2').value;
+            var amt = document.getElementById('amt').value;
+
+            if(amt == "" || amt <= 0 || isNaN(amt)){
+              document.getElementById('priceError').style.display = "inline-block";
+              return;
+            }
+
+            fetch('https://api.exchangeratesapi.io/latest?base='+Country)
+                .then(response =>
+                    response.json()
+                )
+                .then(data =>{
+                    var rate = data.rates[Country2];
+                    var result = rate*amt;
+                    document.getElementById('result').innerHTML = Country2+' '+result;
+                })
+        }
+
+        function exchange() {
+            var Country = document.getElementById('Country').value;
+            var Country2 = document.getElementById('Country2').value;
+
+            document.getElementById('Country').value = Country2;
+            document.getElementById('Country2').value = Country;
+        }
+    </script>
+  </body>
+</html>
